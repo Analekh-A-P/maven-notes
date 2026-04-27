@@ -1,0 +1,260 @@
+Maven
+
+---
+
+.writing code + build deployment
+
+source code (.java) → compile → byte code(.class) → test case → unit test(Junit) → package → jar/war build
+
+if you are application standalone then it is jar (java archive)
+
+if your application is web then it is war
+
+build part - we use tool like maven - its make easy
+
+if we dont use build tool,we can do it mannual but maven do it automatic
+
+.Java build and project management tool
+
+.Manages dependencies and automates the build process
+
+.Maven is a free and open-source build automation tool developed by the Apache software foundation
+
+.It is primarly used to automate the build process of Java projects,including tasks such comiling code,managing dependencies,packaging,testing,and deployment.
+
+What Maven can do?
+
+.Create the standard project folder strucuture
+
+.Download and manage required dependencies/libraries automatically
+
+.Execute unit test cases using testing frameworks like JUnit
+
+.Compile the project source code
+
+.package the project into deployable formats such as JAR or WAR
+
+Installation Guid
+
+---
+
+install maven ini local 
+
+check installed or not : mvn -v
+
+1st step 
+try yourself
+install in aws ec2
+
+learn aws and how to install maven all
+
+mvn archetype:generate -DgroupId=com.analekh -DartifactId=analekh-mvn-app -DarchetypeArtifactId=maven-archetype-quickstart -DarchetypeVersion=1.0 -DinteractiveMode=false
+
+Archetype     Maven Dependencies
+
+Group ID       Maven Goals
+
+Artifact ID     Maven Repositories
+
+Version          
+
+Packaging Type  
+
+Archetype is a template that defines the structure of a Maven project.
+Examples:
+
+maven-archetype-quickstart→Java stand-alone application
+
+maven-archetype-webapp → Java web application
+
+Group ID
+
+Represtents the organization or company name
+
+Examples:
+
+com.tcs,com.ibm,com.telusko
+
+Note:Group ID follows reverse doamin name convention,typically representing a company or organization
+
+Artifact ID
+
+Represents the version of the project
+
+Examples:
+
+telusko-app,amazon-app,flipkart-app
+
+version
+
+specifies the version of the project
+
+examples:
+
+0.0.1-SANPSHOT,1.0-RELEASE
+
+SNAPSHOT - Under development
+
+RELEASE - Final version,delivered to the cliient
+
+packaging type
+
+Defines the packaging format of the project
+
+examples:jar,war
+
+Note: The default packaging is jar if not specified
+
+Maven Dependencies
+
+Libraries or external modules required for project developement.
+
+Examples:
+
+spring,hibernate,junit,kafka,redis
+
+Maven Goals
+
+Used to perform specific steps in the Maven build lifecycle
+
+Examples:
+
+clean,compile,test,package,deploy
+
+Maven Repositories
+
+Storage locations for Maven dependencies(artifact/libaries).
+
+Examples:
+
+Central Repository
+
+Remtoe Repository
+
+Local Repository
+
+Maven Goals
+
+Maven Goals are used to perform various stages of the  project build lifecycle.
+
+mvn <goal>
+
+<build>
+
+<plugin>
+
+<groupId>org.apache.maven.plugins</groupId>
+
+<artifactId>maven-compiler-plugin</artifactId>
+
+<version>3.11.0</version>
+
+<configuration>
+
+<source>26</source>
+
+<target>26</target>
+
+</configuration>
+
+</plugin>
+
+</build>
+
+mvn compile
+
+mvn  clean
+
+mvn test
+
+ls -l
+
+mvn package
+
+mvn clean package
+
+mvn archetype:generate -DgroupId=com.analekh -DartifactId=analekh-web-app -DarchetypeArtifactId=maven-archetype-webapp-DarchetypeVersion=1.0 -DinteractiveMode=false
+
+mvn repoistory
+
+Central Repository(Official Online Repo)
+
+Local Repositroy(on your Machine)
+
+Remote Repository(company or Third party server)
+
+Maven App(pom.xml) → Local Repo → Maven Central Repo → Remote Repo
+
+1.Local Repository(on your Machine)
+
+This is the .m2/repository folder in your computer
+
+ITs where maven stores downloaded dependencies so it doesn’t re-download them every time.
+
+If a dependency is already here,Maven uses it directly!
+
+2.Central Repository (=Officaill Online Repo)
+
+This is Maven’s offical public repository hosted online:
+
+https://repo.maven.apache.org/maven2
+
+It contains  millions of open-source libraries
+
+if something is not in your local repo Maven 
+
+pom.xml 
+
+pom - project object model
+
+maven-archetype-quickstart : type this in eclipse
+
+Maven Build Lifecycle
+
+---
+
+1.default ==⇒Main lifecycle for building your application (Mostly used)
+
+2.clean ==⇒ cleaning the target/directory
+
+[3.site](http://3.site) ==⇒For generating documentation
+
+validate → compile → test → package → verify → install → deploy
+
+Gradle build tool
+
+---
+
+What is a Build Tool?
+
+A build tool is software that automate the process of building your project.
+
+“Building” means:
+
+Compiling source code(Java → bytecode).
+
+Packaging code into JAR/WAR files.
+
+Managing dependencies(external libraries like Hibernate,Spring,etc).
+
+Running tests.
+
+Deploying the application.
+
+When you build your project,the output can be packaged in JAR(Java Archive)/WAR(Web Application)
+
+Bundles your code plus all dependencies.
+
+can be run directly without extra setup.
+
+gradle -v
+
+gradle init
+
+gradle task
+
+gradle build
+
+java -jar projectName
+
+grade clean
