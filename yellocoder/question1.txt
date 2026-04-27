@@ -1,1 +1,240 @@
-dd
+Q. How you can add libraries in the application using maven in runtime (using plugins) ?
+----------------------------------------------------------------------------------------------------------
+How can you add libraries in the application using maven in runtime(using plugins)
+    Answer:
+        Build a custom plugin using Java and Maven's APIs for dependency resolutin and download
+
+        Example of Maven Plugin
+            public class LibraryManagerPlugin{
+                public void downloadAndAddLibraray(String groupId,String artifactId,String version){
+                    //Use Maven's API to resolve and download the library
+                    //...(implementation using Maven's API)
+                    //Add the download library to the classpath
+                    //...(implementation to add library to classpath)..
+                }
+            }
+
+            import org.eclipse.aether.RepositorySystem;
+import org.eclipse.aether.RepositorySystemSession;
+import org.eclipse.aether.artifact.DefaultArtifact;
+import org.eclipse.aether.collection.DefaultDependencyCollector;
+import org.eclipse.aether.collection.DependencyCollectionContext;
+import org.eclipse.aether.graph.Dependency;
+import org.eclipse.aether.graph.DependencyFilter;
+import org.eclipse.aether.resolution.ArtifactRequest;
+import org.eclipse.aether.resolution.ArtifactResult;
+import org.eclipse.aether.transport.http.HttpTransporterFactory;
+import org.eclipse.aether.transport.wagon.WagonTransporterFactory;
+import org.eclipse.aether.util.repository.DefaultRepositorySystemSession;
+
+import java.io.File;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Collections;
+
+public class LibraryManagerPlugin {
+
+    private final RepositorySystem repoSystem;
+    private final RepositorySystemSession repoSession;
+    private final DependencyFilter depFilter;
+
+    public LibraryManagerPlugin() {
+        this.repoSystem = Booter.newRepositorySystem();
+        this.repoSession = Booter.newRepositorySystemSession(repoSystem);
+        this.repoSession.setDependencySelector(
+            new AndDependencySelector(
+                new ScopeDependencySelector(JavaScopes.RUNTIME),
+                new OptionalDependencySelector()
+            )
+        );
+    }
+
+    public void downloadAndLoad(String groupId,
+                               String artifactId,
+                               String version) throws Exception {
+
+        DefaultArtifact artifact =
+            new DefaultArtifact(groupId, artifactId, "jar", version);
+
+        ArtifactRequest request = new ArtifactRequest();
+        request.setArtifact(artifact);
+        request.setRepositories(repoSession.getRemoteRepositories());
+
+        ArtifactResult result =
+            repoSystem.resolveArtifact(repoSession, request);
+
+        File jarFile = result.getArtifact().getFile();
+
+        try (URLClassLoader classLoader =
+                new URLClassLoader(
+                    new URL[]{jarFile.toURI().toURL()},
+                    LibraryManagerPlugin.class.getClassLoader()
+                )) {
+
+            Class<?> loadedClass =
+                classLoader.loadClass("com.example.DynamicLibrary");
+
+            Object instance =
+                loadedClass.getDeclaredConstructor().newInstance();
+
+            System.out.println("Library loaded successfully");
+        }
+    }
+
+    public static void main(String[] args) throws Exception {
+        LibraryManagerPlugin loader = new LibraryManagerPlugin();
+        loader.downloadAndLoad("com.example", "dynamic-lib", "1.0.0");
+    }
+}
+
+
+
+Runtime
+    Instantiate the plugin and call the downloadAndLibrary method 
+    to load libraries on demand
+
+    Imagine your application needs to load a library based
+    on a certain condition at runtime:
+
+    public static vlid main(String[] args){
+        //...
+        LibraryManagerPlugin libraryManager = new LibraryManagerPlugin();
+        if(someCondition()){
+            libraryManager.downloadAndAddLibraray("org.example","my-library","1.0");
+        }
+        //...(Rest of your application)...
+    }
+
+    private static boolean someCondition(){
+        //your condition for loading the library
+        //...
+        return true;//Example
+    }
+
+
+
+
+Summary:
+    A Java plugin that downloads and dynamically
+    loads libraries from Maven Centroal using Aether.
+
+    Aether is a library developed by Eclipse that
+    provides a lightweight and extensible API for
+    working with Maven repositories
+
+    Aether is useful when you want to dynamically
+    fetch and load dependencies at runtime in a
+    Java application,as seen in your LibraryManagerPlugin code
+
+
+
+
+
+Copy Source Code
+
+
+import org.eclipse.aether.RepositorySystem;
+
+import org.eclipse.aether.RepositorySystemSession;
+
+import org.eclipse.aether.artifact.DefaultArtifact;
+
+import org.eclipse.aether.collection.CollectRequest;
+
+import org.eclipse.aether.connector.basic.BasicRepositoryConnectorFactory;
+
+import org.eclipse.aether.graph.Dependency;
+
+import org.eclipse.aether.repository.RemoteRepository;
+
+import org.eclipse.aether.resolution.ArtifactRequest;
+
+import org.eclipse.aether.resolution.ArtifactResult;
+
+import org.eclipse.aether.spi.connector.transport.TransporterFactory;
+
+import org.eclipse.aether.transport.file.FileTransporterFactory;
+
+import org.eclipse.aether.transport.http.HttpTransporterFactory;
+
+import org.eclipse.aether.util.repository.DefaultRepositorySystemSession;
+
+
+import java.io.File;
+
+import java.net.URL;
+
+import java.net.URLClassLoader;
+
+import java.util.Collections;
+
+
+public class LibraryManagerPlugin {
+
+
+    private final RepositorySystem repoSystem;
+
+    private final RepositorySystemSession session;
+
+    private final RemoteRepository central;
+
+
+    public LibraryManagerPlugin() {
+
+        this.repoSystem = Booter.newRepositorySystem();
+
+        this.session = Booter.newRepositorySystemSession(repoSystem);
+
+        this.central = new RemoteRepository.Builder("central", "default", 
+
+                          "https://repo.maven.apache.org/maven2").build();
+
+    }
+
+
+    public downloadAndAddLibrary(String groupId, String artifactId, String version) 
+
+      throws Exception {
+
+        DefaultArtifact artifact = 
+
+                    new DefaultArtifact(groupId + ":" + artifactId + ":" + version);
+
+        ArtifactRequest request = new ArtifactRequest();
+
+        request.setArtifact(artifact);
+
+        request.setRepositories(Collections.singletonList(central));
+
+
+        ArtifactResult result = repoSystem.resolveArtifact(session, request);
+
+        File jarFile = result.getArtifact().getFile();
+
+
+        System.out.println("Downloaded: " + jarFile.getAbsolutePath());
+
+
+        // Dynamically load JAR using URLClassLoader
+
+        URL jarURL = jarFile.toURI().toURL();
+
+        URLClassLoader classLoader = new URLClassLoader(new URL[]{jarURL}, 
+
+                                        LibraryManagerPlugin.class.getClassLoader());
+
+
+        System.out.println("Library loaded successfully!");
+
+    }
+
+
+    public static void main(String[] args) throws Exception {
+
+        LibraryManagerPlugin manager = new LibraryManagerPlugin();
+
+        manager.downloadAndAddLibrary("org.apache.commons", "commons-lang3", "3.12.0");
+
+    }
+
+}

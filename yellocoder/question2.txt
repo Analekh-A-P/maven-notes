@@ -1,0 +1,79 @@
+Q. Can you explain the different types of dependencies in Maven ?
+-------------------------------------------------------------------------------------------------------
+Can you explain the different types of dependencies in Maven and how Maven handles transitive dependencies ?
+
+    Answer
+
+        Maven manages project dependencies in different ways based on how and 
+        when they’re used in the build lifecycle.
+
+        Below are the key types of Maven dependencies:
+
+            Direct Dependencies
+            Transitive Dependencies
+            Optional Dependencies
+            Parent Dependency
+
+
+1. Direct Dependencies
+
+.These are dependencies explicitly declared in the pom.xml.
+.They are required by your project at compile, test, or runtime.
+
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+  <version>...</version>
+</dependency>
+
+2. Transitive Dependencies
+
+.Maven automatically includes dependencies of your declared dependencies — called transitive dependencies.
+
+.This simplifies dependency management by avoiding the need to declare every required library manually.
+
+.Adding the spring-boot-starter-data-jpa includes several transitive dependencies such as:
+
+    .spring-data-jpa
+    .spring-data-commons
+    .spring-orm
+
+
+3. Optional Dependencies
+
+    .These are dependencies that will not be inherited by projects that depend on your module, unless explicitly declared.
+
+    .This is useful for preventing unnecessary dependencies from leaking into downstream projects.
+
+    .In this case, some library is optional and won’t be included in other projects unless explicitly added.
+
+<dependency>
+  <groupId>com.example</groupId>
+  <artifactId>library-artifact</artifactId>
+  <version>1.0.0</version>
+  <optional>true</optional>
+</dependency>
+
+4. Parent Dependency
+
+    .In Maven, you can inherit dependency management and plugin configurations from a parent project using the <parent> tag.
+
+    .This is especially useful in multi-module projects for centralized version control.
+
+    .This allows your project to inherit common settings, dependency versions, and build configurations from the Spring Boot parent.
+
+<parent>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-parent</artifactId>
+  <version>...</version>
+</parent>
+
+
+Summary
+
+Maven dependencies come in different types based on their usage and scope.
+
+    .Direct dependencies are explicitly declared in pom.xml
+    .Transitive dependencies are pulled automatically from your direct dependencies
+    .Optional dependencies are excluded from downstream projects unless explicitly added
+    .Parent dependencies allow inheriting configurations and dependency versions from a common parent project
