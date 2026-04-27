@@ -1,0 +1,321 @@
+==============================
+MAVEN COMPLETE GUIDE (END TO END)
+==============================
+
+1. INTRODUCTION
+
+Apache Maven is a build automation and dependency management tool used mainly for Java projects.
+
+It helps to:
+- Manage project dependencies (libraries)
+- Build the project (compile, test, package)
+- Standardize project structure
+- Automate tasks
+
+--------------------------------
+
+2. WHY MAVEN IS USED
+
+Before Maven:
+- Manually download JAR files
+- Add to project manually
+- Manage versions manually
+
+With Maven:
+- Automatically downloads dependencies
+- Handles transitive dependencies
+- Provides build lifecycle
+- Easy project management
+
+--------------------------------
+
+3. MAVEN PROJECT STRUCTURE
+
+Standard directory structure:
+
+my-project/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/        (application code)
+│   │   └── resources/   (config files)
+│   │
+│   └── test/
+│       └── java/        (test code)
+│
+├── pom.xml              (main configuration file)
+└── target/              (compiled output)
+
+--------------------------------
+
+4. POM.XML (PROJECT OBJECT MODEL)
+
+The most important file in Maven.
+
+Basic structure:
+
+<project>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>com.company</groupId>
+    <artifactId>my-app</artifactId>
+    <version>1.0.0</version>
+
+    <dependencies>
+        <!-- Dependencies go here -->
+    </dependencies>
+</project>
+
+--------------------------------
+
+5. IMPORTANT TERMS
+
+groupId:
+- Represents organization or company
+- Example: com.company.project
+
+artifactId:
+- Project name
+- Example: my-app
+
+version:
+- Version of project
+- Example: 1.0.0
+
+Combined format:
+groupId:artifactId:version
+
+--------------------------------
+
+6. DEPENDENCIES
+
+Dependencies are external libraries required for the project.
+
+Example:
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-core</artifactId>
+    <version>5.3.0</version>
+</dependency>
+
+Maven downloads dependencies from Maven Central Repository.
+
+--------------------------------
+
+7. TRANSITIVE DEPENDENCIES
+
+When you add one dependency, Maven may download other required libraries automatically.
+
+Example:
+Spring dependency may download logging libraries.
+
+--------------------------------
+
+8. MAVEN REPOSITORIES
+
+1. Local Repository:
+- Stored on your system
+- Path: ~/.m2/repository
+
+2. Central Repository:
+- Default remote repository
+- Contains all public libraries
+
+3. Remote Repository:
+- Company/private repository (Nexus, Artifactory)
+
+--------------------------------
+
+9. MAVEN BUILD LIFECYCLE
+
+Phases:
+
+clean      -> Removes old files
+validate   -> Validates project
+compile    -> Compiles source code
+test       -> Runs tests
+package    -> Creates JAR/WAR
+install    -> Stores in local repo
+deploy     -> Uploads to remote repo
+
+--------------------------------
+
+10. COMMON MAVEN COMMANDS
+
+mvn clean
+- Deletes target folder
+
+mvn compile
+- Compiles Java code
+
+mvn test
+- Runs test cases
+
+mvn package
+- Creates JAR/WAR file
+
+mvn install
+- Installs artifact to local repository
+
+mvn clean install
+- Clean + build + install
+
+--------------------------------
+
+11. PLUGINS
+
+Plugins provide functionality to Maven.
+
+Examples:
+- Compiler plugin
+- Surefire plugin (testing)
+- Jar plugin
+
+Example:
+
+<build>
+    <plugins>
+
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>3.8.1</version>
+        </plugin>
+
+    </plugins>
+</build>
+
+--------------------------------
+
+12. EXECUTION USING PLUGIN (RUNTIME)
+
+Example:
+
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>exec-maven-plugin</artifactId>
+    <version>3.1.0</version>
+    <executions>
+        <execution>
+            <goals>
+                <goal>java</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+
+Run:
+mvn exec:java
+
+--------------------------------
+
+13. DEPENDENCY SCOPE
+
+compile:
+- Default scope
+- Available everywhere
+
+provided:
+- Provided by server (e.g., servlet API)
+
+runtime:
+- Needed only during execution
+
+test:
+- Only for testing
+
+--------------------------------
+
+14. PACKAGING TYPES
+
+jar:
+- Standalone Java application
+
+war:
+- Web application
+
+--------------------------------
+
+15. BUILD SECTION
+
+Used to configure build-related settings.
+
+Example:
+
+<build>
+    <finalName>my-app</finalName>
+</build>
+
+--------------------------------
+
+16. PROFILES
+
+Used for different environments (dev, test, prod).
+
+Example:
+
+<profiles>
+    <profile>
+        <id>dev</id>
+    </profile>
+</profiles>
+
+--------------------------------
+
+17. MAVEN FLOW
+
+Write Code
+   ↓
+Add dependencies in pom.xml
+   ↓
+Run Maven command
+   ↓
+Maven downloads libraries
+   ↓
+Compile
+   ↓
+Test
+   ↓
+Package
+   ↓
+Run or Deploy
+
+--------------------------------
+
+18. MAVEN VS GRADLE
+
+Maven:
+- XML-based
+- Easy to understand
+
+Gradle:
+- Script-based (Groovy/Kotlin)
+- Faster
+
+--------------------------------
+
+19. INTERVIEW QUESTIONS
+
+- What is Maven?
+- What is pom.xml?
+- What is dependency?
+- What is lifecycle?
+- What is plugin?
+- What is scope?
+- Difference between install and deploy?
+
+--------------------------------
+
+20. KEY DIFFERENCE
+
+Dependency:
+- WHAT your project needs
+
+Plugin:
+- WHAT Maven does
+
+--------------------------------
+
+END OF DOCUMENT
+==============================
